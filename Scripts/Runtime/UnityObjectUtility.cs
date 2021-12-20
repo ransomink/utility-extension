@@ -64,12 +64,12 @@ namespace Ransom
 
         public static void RemoveComponent<T>(this T comp, float time = 0f) where T : Component
         {
-            UnityEngine.Object.Destroy(comp, time);
+            UnityObject.Destroy(comp, time);
         }
 
         public static void RemoveComponentImmediate<T>(this T comp) where T : Component
         {
-            UnityEngine.Object.DestroyImmediate(comp);
+            UnityObject.DestroyImmediate(comp);
         }
         #endregion Methods
     }

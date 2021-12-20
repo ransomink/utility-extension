@@ -1,0 +1,22 @@
+{
+    "name": "com.ransomink.utils",
+    "version": "1.0.0",
+    "displayName": "Ransom Utility",
+    "description": "A utility library extending the functionality of unity types.",
+    "unity": "2020.3",
+    "unityRelease": "0f1",
+    "keywords": [
+        "extension",
+        "function",
+        "helper",
+        "method",
+        "static",
+        "unity",
+        "utility",
+        "ransom"
+    ],
+    "author": {
+        "name": "Joshua Smith",
+        "url": "https://github.com/ransomink/utility-extension"
+    }
+}
