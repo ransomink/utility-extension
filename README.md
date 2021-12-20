@@ -1,2 +1,2 @@
 # utility-extension
-a utility library for extending functionality of unity types.
+A utility library extending the functionality of unity types.
