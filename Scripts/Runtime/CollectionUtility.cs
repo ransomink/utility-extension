@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Ransom.VectorUtility;
 
 namespace Ransom
 {
@@ -51,12 +50,13 @@ namespace Ransom
             float dist  = float.MaxValue;
             float diff  = float.MaxValue;
 
-            for (var i = list.Count - 1; i >= 0; i--)
+            var count  = list.Count;
+            for (var i = count - 1; i >= 0; --i)
             {
                 var  comp = list[i];
                 if (!comp) continue;
                 pointB = comp.transform.position;
-                diff   = GetDistance(pointA, pointB);
+                diff   = VectorUtility.GetDistance(pointA, pointB);
                 
                 if (diff <= dist)
                 {
@@ -75,10 +75,11 @@ namespace Ransom
             float dist  = float.MaxValue;
             float diff  = float.MaxValue;
 
-            for (var i = list.Count - 1; i >= 0; i--)
+            var count  = list.Count;
+            for (var i = count - 1; i >= 0; --i)
             {
                 pointB = list[i];
-                diff   = GetDistance(pointA, pointB);
+                diff   = VectorUtility.GetDistance(pointA, pointB);
                 
                 if (diff <= dist)
                 {
@@ -97,10 +98,11 @@ namespace Ransom
             float dist  = float.MaxValue;
             float diff  = float.MaxValue;
 
-            for (var i = list.Count - 1; i >= 0; i--)
+            var count  = list.Count;
+            for (var i = count - 1; i >= 0; --i)
             {
                 pointB = list[i].transform.position;
-                diff   = GetDistance(pointA, pointB);
+                diff   = VectorUtility.GetDistance(pointA, pointB);
                 
                 if (diff <= dist)
                 {
@@ -121,7 +123,9 @@ namespace Ransom
         /// <returns>If index is valid.</returns>
         public static bool IsIndexValid<T>(this T[] arr, int i)
         {
-            return (!ReferenceEquals(arr, null)) && (i >= 0) && (i < arr.Length);
+            var length = arr.Length;
+            // return (!ReferenceEquals(arr, null)) && (i >= 0) && (i < arr.Length);
+            return (!ReferenceEquals(arr, null)) && MathUtility.IsBetween(i, 0, length);
         }
 
         /// <summary>
@@ -133,7 +137,9 @@ namespace Ransom
         /// <returns>If index is valid.</returns>
         public static bool IsIndexValid<T>(this IReadOnlyList<T> list, int i)
         {
-            return (!ReferenceEquals(list, null)) && (i >= 0) && (i < list.Count);
+            var count = list.Count;
+            // return (!ReferenceEquals(list, null)) && (i >= 0) && (i < list.Count);
+            return (!ReferenceEquals(list, null)) && MathUtility.IsBetween(i, 0, count);
         }
 
         /// <summary>
@@ -144,9 +150,8 @@ namespace Ransom
         {
             if (!ReferenceEquals(list, null)) list = new List<T>();
             
-            int n = arr.Length;
-
-            for (var i = 0; i < n; i++)
+            var n = arr.Length;
+            for (var i = 0; i < n; ++i)
             {
                 if (!ReferenceEquals(arr[i], null))
                 {
@@ -158,8 +163,7 @@ namespace Ransom
             //list.CopyTo(arr);
 
             n = list.Count;
-
-            for (var i = n - 1; i >= 0; i--)
+            for (var i = n - 1; i >= 0; --i)
             {
                 //Debug.Log("ARRAY["+ i +"] = LIST["+ (n - i - 1) +"]");
                 arr[i] = list[n - i - 1];
@@ -174,9 +178,8 @@ namespace Ransom
         /// <param name="list">This list collection.</param>
         public static void ReverseNonAlloc<T>(this IList<T> list)
         {
-            int n = list.Count;
-
-            for (var i = 0; i < n; i++)
+            var n = list.Count;
+            for (var i = 0; i < n; ++i)
             {
                 T tmp			= list[i];
                 list[i]		    = list[n - i - 1];
@@ -192,7 +195,6 @@ namespace Ransom
         public static void Shuffle<T>(this IList<T> list)
         {
             var n = list.Count;
-
             while (n > 1)
             {
                 n--;
