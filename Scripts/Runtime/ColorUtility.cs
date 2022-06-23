@@ -40,6 +40,8 @@ namespace Ransom
                    lhs.a == rhs.a;
         }
 
+        
+
         public static uint ToUInt(this Color32 color) => ColorToUInt(color);
 
         private static Color32 UIntToColor(uint color)
@@ -49,6 +51,50 @@ namespace Ransom
             byte g = (byte)(color >> 8);
             byte b = (byte)(color >> 0);
             return new Color32(r, g, b, a);
+        }
+
+        private static UnityEngine.Color Set(this UnityEngine.Color color, int dim, float value)
+        {
+            var c  = color;
+            c[dim] = value;
+            color  = c;
+            return c;
+        }
+
+        private static UnityEngine.Color SetR(this UnityEngine.Color color, float value)
+        {
+            return color.Set(0, value);
+            // var c = color;
+            // c.r   = value;
+            // color = c;
+            // return c;
+        }
+
+        private static UnityEngine.Color SetG(this UnityEngine.Color color, float value)
+        {
+            return color.Set(1, value);
+            // var c = color;
+            // c.g   = value;
+            // color = c;
+            // return c;
+        }
+
+        private static UnityEngine.Color SetB(this UnityEngine.Color color, float value)
+        {
+            return color.Set(2, value);
+            // var c = color;
+            // c.b   = value;
+            // color = c;
+            // return c;
+        }
+
+        private static UnityEngine.Color SetA(this UnityEngine.Color color, float value)
+        {
+            return color.Set(3, value);
+            // var c = color;
+            // c.a   = value;
+            // color = c;
+            // return c;
         }
         #endregion
     }

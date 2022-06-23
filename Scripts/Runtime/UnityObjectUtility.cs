@@ -8,18 +8,8 @@ namespace Ransom
         #region Methods
         public static T AsUnityNull<T>(this T obj) where T : UnityObject
         {
-            if (obj == null) return null;
+            if (!obj) return null;
             return obj;
-        }
-
-        public static bool IsDestroyed(this UnityObject target)
-        {
-            return !ReferenceEquals(target, null) && target == null;
-        }
-
-        public static bool IsUnityNull(this object obj)
-        {
-            return obj == null || obj is UnityObject uo && uo == null;
         }
         
         public static bool CompareLayer(int lhs, int rhs)
@@ -47,7 +37,7 @@ namespace Ransom
 
         public static bool ContainsLayer(this LayerMask layerMask, LayerMask layer)
         {
-            return layerMask == (layerMask | (1 << layer.value));
+            return layerMask == (layerMask | layer);
         }
 
         public static void Destroy(GameObject go)
@@ -60,6 +50,16 @@ namespace Ransom
             {
                 throw;
             }
+        }
+
+        public static bool IsDestroyed(this UnityObject uo)
+        {
+            return (uo is object o && !(o is null)) && uo is null;
+        }
+
+        public static bool IsUnityNull(this object obj)
+        {
+            return obj is null || (obj is UnityObject uo && uo is null);
         }
 
         public static void RemoveComponent<T>(this T comp, float time = 0f) where T : Component

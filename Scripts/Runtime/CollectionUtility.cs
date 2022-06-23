@@ -11,7 +11,7 @@ namespace Ransom
     {
         #region Methods
         #region Array/List
-        public static void FindMinMaxValue(Vector3 point, IReadOnlyList<Vector3> vectors)
+        public static void FindMinMaxValue(Vector3 point, ICollection<Vector3> vectors)
         {
             var min = float.MaxValue;
             var max = float.MinValue;
@@ -37,13 +37,13 @@ namespace Ransom
             }
         }
 
-        public static T GetClosest<T>(T comp, IReadOnlyList<T> list) where T : Component
+        public static T GetClosest<T>(T comp, IList<T> list) where T : Component
         {
             var pos = comp.transform.position;
             return GetClosest(pos, list);
         }
 
-        public static T GetClosest<T>(Vector3 pointA, IReadOnlyList<T> list) where T : Component
+        public static T GetClosest<T>(Vector3 pointA, IList<T> list) where T : Component
         {
             Vector3 pointB;
             int   index = -1;
@@ -68,7 +68,7 @@ namespace Ransom
             return index > -1 ? list[index] : null;
         }
 
-        public static Vector3 GetClosestPoint(Vector3 pointA, IReadOnlyList<Vector3> list)
+        public static Vector3 GetClosestPoint(Vector3 pointA, IList<Vector3> list)
         {
             Vector3 pointB;
             int   index = -1;
@@ -91,7 +91,7 @@ namespace Ransom
             return index > -1 ? list[index] : Vector3.negativeInfinity;
         }
 
-        public static Vector3 GetClosestPoint<T>(Vector3 pointA, IReadOnlyList<T> list) where T : Component
+        public static Vector3 GetClosestPoint<T>(Vector3 pointA, IList<T> list) where T : Component
         {
             Vector3 pointB;
             int   index = -1;
@@ -113,6 +113,16 @@ namespace Ransom
 
             return index > -1 ? list[index].transform.position : Vector3.negativeInfinity;
         }
+        
+        // public static int GetRandom<T>(this T[] arr)
+        // {
+        //     return Random.Range(0, arr.Length);
+        // }
+        
+        public static int GetRandom<T>(this ICollection<T> coll)
+        {
+            return Random.Range(0, coll.Count);
+        }
 
         /// <summary>
         /// Check if an index is valid within an array.
@@ -121,12 +131,12 @@ namespace Ransom
         /// <param name="arr">This array (generic).</param>
         /// <param name="i">The index to check.</param>
         /// <returns>If index is valid.</returns>
-        public static bool IsIndexValid<T>(this T[] arr, int i)
-        {
-            var length = arr.Length;
-            // return (!ReferenceEquals(arr, null)) && (i >= 0) && (i < arr.Length);
-            return (!ReferenceEquals(arr, null)) && MathUtility.IsBetween(i, 0, length);
-        }
+        // public static bool IsIndexValid<T>(this T[] arr, int i)
+        // {
+        //     var length = arr.Length;
+        //     // return (!ReferenceEquals(arr, null)) && (i >= 0) && (i < arr.Length);
+        //     return (!ReferenceEquals(arr, null)) && MathUtility.IsBetween(i, 0, length);
+        // }
 
         /// <summary>
         /// Check if an index is valid within a list.
@@ -135,11 +145,64 @@ namespace Ransom
         /// <param name="arr">This list (generic).</param>
         /// <param name="i">The index to check.</param>
         /// <returns>If index is valid.</returns>
-        public static bool IsIndexValid<T>(this IReadOnlyList<T> list, int i)
+        public static bool IsIndexValid<T>(this ICollection<T> list, int i)
         {
             var count = list.Count;
             // return (!ReferenceEquals(list, null)) && (i >= 0) && (i < list.Count);
             return (!ReferenceEquals(list, null)) && MathUtility.IsBetween(i, 0, count);
+        }
+
+        // public static bool IsNullOrEmpty<T>(this T[] arr)
+        // {
+        //     return (ReferenceEquals(arr, null) || arr.Length < 1);
+        // }
+
+        public static bool IsNullOrEmpty<T>(this ICollection<T> coll)
+        {
+            return (ReferenceEquals(coll, null) || coll.Count < 1);
+        }
+
+        public static T First(this IList<T> list) where T : Component
+        {
+            if (list.IsNullOrEmpty()) return null;
+            return list[0];
+        }
+
+        public static T FirstOrDefault<T>(this IList<T> list) where T : Component
+        {
+            T   first = list[0];
+            if (first != null) return first;
+
+            var count  = list.Count;
+            for (var i = 1; i < count; ++i)
+            {
+                first = list[i];
+                if (first != null) return first;
+            }
+
+            return default;
+        }
+
+        public static T Last(this IList<T> list) where T : Component
+        {
+            if (list.IsNullOrEmpty()) return null;
+            return list[list.Count - 1];
+        }
+
+        public static T LastOrDefault<T>(this IList<T> list) where T : Component
+        {
+            var count = list.Count - 1;
+            T   last  = list[count];
+
+            if (last != null) return last;
+            
+            for (var i = count - 1; i >= 0; --i)
+            {
+                last = list[i];
+                if (last != null) return last;
+            }
+
+            return default;
         }
 
         /// <summary>
@@ -153,9 +216,10 @@ namespace Ransom
             var n = arr.Length;
             for (var i = 0; i < n; ++i)
             {
-                if (!ReferenceEquals(arr[i], null))
+                T item = arr[i];
+                if (!ReferenceEquals(item, null))
                 {
-                    list.Add (arr[i]);
+                    list.Add(item);
                 }
             }
 
@@ -207,7 +271,20 @@ namespace Ransom
         #endregion Array/List
 
         #region Dictionary
-        public static TKey KeyByValue<TKey, TValue>(this Dictionary<TKey, TValue> dict, TValue value)
+        public static TKey KeyByValue<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
+        {
+            //return dict.FirstOrDefault(x => ReferenceEquals(x.Value, value)).Key;
+
+            foreach (var kvp in dict)
+            {
+                if (kvp.Value.Equals(value)) return kvp.Key;
+                //if (EqualityComparer<TValue>.Default.Equals(kvp.Value, value)) return kvp.Key;
+            }
+
+            return default(TKey);
+        }
+        
+        public static TKey KeyByValueRef<TKey, TValue>(this IDictionary<TKey, TValue> dict, TValue value)
         {
             //return dict.FirstOrDefault(x => ReferenceEquals(x.Value, value)).Key;
 

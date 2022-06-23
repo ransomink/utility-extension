@@ -1,3 +1,5 @@
+using System;
+
 namespace Ransom
 {
     /// <summary>
@@ -22,6 +24,8 @@ namespace Ransom
         /// </summary>
         /// <returns>The opposite value.</returns>
         public static bool Inverted(this bool b) => b ^= true;
+
+        public static Action Ternary(this bool b, Action @true, Action @false) => b ? @true : @false;
         #endregion Methods
     }
 }
