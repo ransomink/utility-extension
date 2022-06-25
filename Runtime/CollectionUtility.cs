@@ -162,7 +162,7 @@ namespace Ransom
             return (ReferenceEquals(coll, null) || coll.Count < 1);
         }
 
-        public static T First(this IList<T> list) where T : Component
+        public static T First<T>(this IList<T> list) where T : Component
         {
             if (list.IsNullOrEmpty()) return null;
             return list[0];
@@ -183,7 +183,7 @@ namespace Ransom
             return default;
         }
 
-        public static T Last(this IList<T> list) where T : Component
+        public static T Last<T>(this IList<T> list) where T : Component
         {
             if (list.IsNullOrEmpty()) return null;
             return list[list.Count - 1];
