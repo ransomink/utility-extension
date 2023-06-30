@@ -2,15 +2,17 @@
     "name": "com.ransomink.utils",
     "version": "1.0.2",
     "displayName": "Ransom Utility",
-    "description": "A utility library extending the functionality of unity types.",
+    "description": "A utility library extending the functionality of Unity built-in types.",
     "unity": "2020.3",
     "unityRelease": "0f1",
     "keywords": [
         "extension",
         "function",
         "helper",
+        "library",
         "method",
         "static",
+        "types",
         "unity",
         "utility",
         "ransom"

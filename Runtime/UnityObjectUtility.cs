@@ -98,12 +98,12 @@ namespace Ransom
 
         public static bool IsDestroyed(this UnityObject uo)
         {
-            return (object)uo is null && uo == null;
+            return /*((object)uo is null) &&*/ uo == null;
         }
 
         public static bool IsUnityNull(this UnityObject uo)
         {
-            return (object)uo is null || uo == null;
+            return /*((object)uo is null) ||*/ uo == null;
         }
 
         public static void RemoveComponent<T>(this T comp, float time = 0f) where T : Component

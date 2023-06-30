@@ -246,16 +246,16 @@ namespace Ransom.Tests
         }
 
         
-        // [UnityTest]
-        // public IEnumerator IsDestroyed_ReturnsTrue_ForDestroyedObject()
-        // {
-        //     Object.Destroy(testObject);
-        //     yield return null;
+        [UnityTest]
+        public IEnumerator IsDestroyed_ReturnsTrue_ForDestroyedObject()
+        {
+            Object.Destroy(testObject);
+            yield return null;
             
-        //     Debug.Log($"Is C# Null: <color=cyan>{(object)testObject is null}</color>");
-        //     Debug.Log($"Is Unity Null: <color=cyan>{testObject == null}</color>");
-        //     Assert.IsTrue(testObject.IsDestroyed());
-        // }
+            Debug.Log($"Is C# Null: <color=cyan>{(object)testObject is null}</color>");
+            Debug.Log($"Is Unity Null: <color=cyan>{testObject == null}</color>");
+            Assert.IsTrue(testObject.IsDestroyed());
+        }
 
         [Test]
         public void IsDestroyed_ReturnsFalse_ForNonDestroyedObject()
@@ -278,6 +278,15 @@ namespace Ransom.Tests
             Assert.IsTrue(testObject.IsUnityNull());
         }
 
+        [UnityTest]
+        public IEnumerator IsUnityNull_ReturnsTrue_IfUnityObjectIsNull()
+        {
+            testObject = null;
+            yield return null;
+
+            Assert.IsTrue(testObject.IsUnityNull());
+        }
+
         [Test]
         public void OneTimeEvent_RemovesListenerAfterInvocation()
         {
@@ -294,15 +303,6 @@ namespace Ransom.Tests
             var direction = Random.insideUnitCircle.normalized;
             var position = direction * 1 + direction * (3 - 1);
             Debug.Log($"<color=cyan>{position}</color>");
-        }
-
-        [UnityTest]
-        public IEnumerator IsUnityNull_ReturnsTrue_IfUnityObjectIsNull()
-        {
-            testObject = null;
-            yield return null;
-
-            Assert.IsTrue(testObject.IsUnityNull());
         }
 
         [UnityTest]
