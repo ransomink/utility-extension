@@ -1,6 +1,6 @@
 {
     "name": "com.ransomink.utils",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "displayName": "Ransom Utility",
     "description": "A utility library extending the functionality of unity types.",
     "unity": "2020.3",
