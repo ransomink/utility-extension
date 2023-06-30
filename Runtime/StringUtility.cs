@@ -1,7 +1,7 @@
 ﻿namespace Ransom
 {
     /// <summary>
-    /// Global string properties and helper methods.
+    /// A collection of utility methods for String.
     /// </summary>    
     public static class StringUtility
     {
@@ -26,19 +26,35 @@
         public static int CharacterLength(string[] arr)
         {
             var length = 0;
-            // var arrLength = arr.Length;
-            // for (var i = arrLength - 1; i > 0; --i) length += arr[i].Length;
-            foreach (var @string in arr) length += @string.Length;
+            var arrLength = arr.Length;
+            for (var i = arrLength - 1; i >= 0; --i) { length += arr[i].Length; }
+            
             return length;
         }
 
-        public static int CombinedLength(this string s, string text) => CharacterLength(s, text);
+        public static int CombineLength(this string s, string text) => CharacterLength(s, text);
         
-        public static int CombinedLength(this string s, string[] arr)
+        public static int CombineLength(this string s, string[] arr)
         {
-            var length = s.Length + CharacterLength(arr);
-            return length;
+            return s.Length + CharacterLength(arr);
         }
+
+        // public static string Reverse(Span<char> span)
+        // {
+        //     if (span.Length == 0) { return string.Empty; }
+
+        //     var i = 0;
+        //     var c = default(char);
+        //     for (var j = span.Length - 1; j > i; --j)
+        //     {
+        //         c = span[i];
+        //         span[i] = span[j];
+        //         span[j] = c;
+        //         i++;
+        //     }
+
+        //     return new string(span);
+        // }
         #endregion Methods
     }
 }

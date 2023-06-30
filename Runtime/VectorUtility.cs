@@ -121,7 +121,7 @@ namespace Ransom
             return GetDistanceVector(posA, posB);
         }
 
-        public static Vector2 Rotate(this Vector2 v, float deg) => RotateRadians(v, deg * Mathf.Deg2Rad);
+        public static Vector2 Rotate(this Vector2 v2, float deg) => RotateRadians(v2, deg);
 
         public static Vector3 RotateAroundPivot(Vector3 pos, Vector3 pivot, Vector3 dir, float angle)
         {
@@ -147,17 +147,41 @@ namespace Ransom
             return (rot * (pos - pivot)) + pivot;
         }
 
-        // Source: http://answers.unity.com/comments/834881/view.html
-        public static Vector2 RotateRadians(this Vector2 v, float rad)
+        public static Vector3 RotateAroundY(this Vector3 v3, float deg)
         {
+            if (deg == 0) return v3;
+
+            var rad = deg * Mathf.Deg2Rad;
             var sin = Mathf.Sin(rad);
             var cos = Mathf.Cos(rad);
 
-            var tx = v.x;
-            var ty = v.y;
-            
-            return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
+            var tx = v3.x;
+            var tz = v3.z;
+
+            v3.x = (cos * tx) - (sin * tz);
+            v3.z = (sin * tx) + (cos * tz);
+            return v3;
         }
+
+        // Source: http://answers.unity.com/comments/834881/view.html
+        public static Vector2 RotateRadians(this Vector2 v2, float deg)
+        {
+            var rad = deg * Mathf.Deg2Rad;
+            var sin = Mathf.Sin(rad);
+            var cos = Mathf.Cos(rad);
+
+            var tx = v2.x;
+            var ty = v2.y;
+            
+            v2.x = (cos * tx) - (sin * ty);
+            v2.y = (sin * tx) + (cos * ty);
+            return v2;
+            // return new Vector2((cos * tx) - (sin * ty), (sin * tx) + (cos * ty));
+        }
+        
+        public static void SetAll(this Vector2 v2, float val) => v2.Set(val, val);
+
+        public static void SetAll(this Vector3 v3, float val) => v3.Set(val, val, val);
         #endregion Methods
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Ransom
 {
+    /// <summary>
+    /// A collection of utility methods for the Transform component.
+    /// </summary>    
     public static class TransformUtility
     {
         #region Methods
@@ -13,26 +16,32 @@ namespace Ransom
 
         public static Vector3 Inverse(this Vector3 vec) => vec * -1;
         
-        public static Transform Add(this Transform t, Vector3 vec, bool useLocal = false)
+        public static Transform AddPos(this Transform t, Vector3 vec, bool useLocal = false)
         {
             var pos = useLocal ? t.localPosition : t.position;
             pos += vec;
-            if (useLocal) t.localPosition = pos;
-            else t.position = pos;
+
+            if (useLocal)
+            {
+                t.localPosition = pos;
+                return t;
+            }
+
+            t.position = pos;
             return t;
         }
 
         public static Transform LocalPos(this Transform t, int dim, float val)
         {
-            var pos         = t.localPosition;
-            pos[dim]        = val;
+            var pos  = t.localPosition;
+            pos[dim] = val;
             t.localPosition = pos;
             return t;
         }
         
         public static Transform LocalPos(this Transform t, Vector3 vec, bool add = false)
         {
-            var pos         = t.localPosition;
+            var pos  = t.localPosition;
             t.localPosition = !add ? vec : pos + vec;
             return t;
         }
@@ -73,10 +82,7 @@ namespace Ransom
 
         public static Transform PosX(this Transform t, float val)
         {
-            var pos = t.position;
-            pos.y   = val;
-            t.position = pos;
-            return t;
+            return t.Pos(0, val);
         }
 
         public static Transform PosY(this Transform t, float val)

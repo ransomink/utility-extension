@@ -26,7 +26,7 @@ namespace Ransom
                 if (dist < min)
                 {
                     minDist = p;
-                    max =  dist;
+                    min =  dist;
                 }
 
                 if (dist > max)
@@ -116,12 +116,18 @@ namespace Ransom
         
         // public static int GetRandom<T>(this T[] arr)
         // {
-        //     return Random.Range(0, arr.Length);
+        //     var length = arr.Length;
+        //     return Random.Range(0, length);
         // }
         
         public static int GetRandom<T>(this ICollection<T> coll)
         {
             return Random.Range(0, coll.Count);
+        }
+
+        public static bool IsEmpty<T>(this ICollection<T> coll)
+        {
+            return coll.Count == 0;
         }
 
         /// <summary>
@@ -145,21 +151,26 @@ namespace Ransom
         /// <param name="arr">This list (generic).</param>
         /// <param name="i">The index to check.</param>
         /// <returns>If index is valid.</returns>
-        public static bool IsIndexValid<T>(this ICollection<T> list, int i)
+        public static bool IsIndexValid<T>(this ICollection<T> coll, int i)
         {
-            var count = list.Count;
+            var count = coll.Count;
             // return (!ReferenceEquals(list, null)) && (i >= 0) && (i < list.Count);
-            return (!ReferenceEquals(list, null)) && MathUtility.IsBetween(i, 0, count);
+            return (!ReferenceEquals(coll, null)) && MathUtility.IsBetween(i, 0, count);
         }
 
         // public static bool IsNullOrEmpty<T>(this T[] arr)
         // {
-        //     return (ReferenceEquals(arr, null) || arr.Length < 1);
+        //     return (ReferenceEquals(arr, null) || arr.Length == 0);
         // }
+
+        public static bool IsNull<T>(this ICollection<T> coll)
+        {
+            return ReferenceEquals(coll, null);
+        }
 
         public static bool IsNullOrEmpty<T>(this ICollection<T> coll)
         {
-            return (ReferenceEquals(coll, null) || coll.Count < 1);
+            return (ReferenceEquals(coll, null) || coll.Count == 0);
         }
 
         public static T First<T>(this IList<T> list) where T : Component
@@ -170,6 +181,8 @@ namespace Ransom
 
         public static T FirstOrDefault<T>(this IList<T> list) where T : Component
         {
+            if (list.IsNullOrEmpty()) return default;
+
             T   first = list[0];
             if (first != null) return first;
 
@@ -191,6 +204,8 @@ namespace Ransom
 
         public static T LastOrDefault<T>(this IList<T> list) where T : Component
         {
+            if (list.IsNullOrEmpty()) return default;
+
             var count = list.Count - 1;
             T   last  = list[count];
 
@@ -211,9 +226,9 @@ namespace Ransom
         /// <param name="arr">This array collection.</param>
         public static T[] ReverseNonAlloc<T>(this T[] arr, IList<T> list = null)
         {
-            if (!ReferenceEquals(list, null)) list = new List<T>();
-            
             var n = arr.Length;
+            if (!ReferenceEquals(list, null)) list = new List<T>(n);
+            
             for (var i = 0; i < n; ++i)
             {
                 T item = arr[i];
@@ -223,14 +238,11 @@ namespace Ransom
                 }
             }
 
-            //arr = new T[list.Count];
-            //list.CopyTo(arr);
-
             n = list.Count;
             for (var i = n - 1; i >= 0; --i)
             {
-                //Debug.Log("ARRAY["+ i +"] = LIST["+ (n - i - 1) +"]");
                 arr[i] = list[n - i - 1];
+                //Debug.Log("$Array[{i}] = List[{n - i - 1}]");
             }
 
             return arr;
@@ -245,8 +257,8 @@ namespace Ransom
             var n = list.Count;
             for (var i = 0; i < n; ++i)
             {
-                T tmp			= list[i];
-                list[i]		    = list[n - i - 1];
+                T tmp   = list[i];
+                list[i] = list[n - i - 1];
                 list[n - i - 1] = tmp;
             }
         }
@@ -258,15 +270,24 @@ namespace Ransom
         /// <param name="list">The list to shuffle.</param>
         public static void Shuffle<T>(this IList<T> list)
         {
+            T   value;
+            var i = 0;
             var n = list.Count;
             while (n > 1)
             {
                 n--;
-                var i   = UnityEngine.Random.Range(0, n + 1);
-                T val   = list[i];
+                i = UnityEngine.Random.Range(0, n + 1);
+                value   = list[i];
                 list[i] = list[n];
-                list[n] = val;
+                list[n] = value;
             }
+        }
+
+        public static void Swap<T>(this IList<T> list, int a, int b)
+        {
+            T temp  = list[a];
+            list[a] = list[b];
+            list[b] = temp;
         }
         #endregion Array/List
 
